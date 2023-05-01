@@ -11,10 +11,87 @@ public class MyTestingClass {
         this.name = name;
     }
 
-    // Generate your own hashCode method
     @Override
     public int hashCode() {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
+    
+      public static void main(String[] args) {
+        MyHashTable<MyTestingClass, Student> table = new MyHashTable<>();
+        Random random = new Random();
+        for (int i = 0; i < 10000; i++) {
+            MyTestingClass key = new MyTestingClass(random.nextInt(100), "Name" + i);
+            Student value = new Student("Student" + i);
+            table.put(key, value);
+        }
+        table.printBucketSizes();
+    }
+}
+
+class MyHashTable<K, V> {
+    private static final int INITIAL_CAPACITY = 16;
+    private ArrayList<LinkedList<Entry<K, V>>> buckets;
+    private int size;
+
+    public MyHashTable() {
+        this.buckets = new ArrayList<>(INITIAL_CAPACITY);
+        for (int i = 0; i < INITIAL_CAPACITY; i++) {
+            buckets.add(new LinkedList<>());
+        }
+        this.size = 0;
+    }
+
+ public void put(K key, V value) {
+        int bucketIndex = getBucketIndex(key);
+        LinkedList<Entry<K, V>> bucket = buckets.get(bucketIndex);
+        for (Entry<K, V> entry : bucket) {
+            if (entry.getKey().equals(key)) {
+                entry.setValue(value);
+                return;
+            }
+        }
+        bucket.add(new Entry<>(key, value));
+        size++;
+    }
+ private int getBucketIndex(K key) {
+        int hashCode = key.hashCode();
+        return hashCode % buckets.size();
+    }
+
+    public void printBucketSizes() {
+        for (int i = 0; i < buckets.size(); i++) {
+            LinkedList<Entry<K, V>> bucket = buckets.get(i);
+            System.out.println("Bucket " + i + " size: " + bucket.size());
+        }
+    }
+    
+       private static class Entry<K, V> {
+        private K key;
+        private V value;
+
+        public Entry(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public K getKey() {
+            return key;
+        }
+
+        public V getValue() {
+            return value;
+        }
+
+        public void setValue(V value) {
+            this.value = value;
+        }
+    }
+    class Student {
+    private String name;
+
+    public Student(String name) {
+        this.name = name;
+    }
+}
