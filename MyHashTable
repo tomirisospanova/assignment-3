@@ -83,3 +83,17 @@ public boolean contains(V value) {
 
         return false;
     }
+    public K getKey(V value) {
+        for (HashNode<K, V> node : chainArray) {
+            HashNode<K, V> currNode = node;
+            while (currNode != null) {
+                if (currNode.value.equals(value)) {
+                    return currNode.key;
+                }
+                currNode = currNode.next;
+            }
+        }
+
+        return null;
+    }
+}
