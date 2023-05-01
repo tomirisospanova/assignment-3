@@ -1,0 +1,20 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Random;
+
+public class MyTestingClass {
+    private int id;
+    private String name;
+
+    public MyTestingClass(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    // Generate your own hashCode method
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
+    }
